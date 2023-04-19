@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.crud.todo.crud.dto.PublicationDTO;
 import com.example.crud.todo.crud.dto.PublicationResponse;
 import com.example.crud.todo.crud.service.PublicationService;
+import com.example.crud.todo.crud.utilities.AppConstants;
 
 @RestController
 @RequestMapping("/api/publications")
@@ -27,9 +28,11 @@ public class PublicationController {
 
     @GetMapping
     public PublicationResponse listPublications(
-            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
-        return publicationService.getAllPublications(pageNo, pageSize);
+            @RequestParam(value = "pageNo", defaultValue = AppConstants.NUMBER_OF_PAGE_BY_DEFECT, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.SIZE_OF_PAGE_BY_DEFECT, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY_DEFECT, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIRECTION_BY_DEFECT, required = false) String sortDir) {
+        return publicationService.getAllPublications(pageNo, pageSize, sortBy, sortDir);
     }
 
     @GetMapping("/{id}")

@@ -11,7 +11,7 @@ public interface PublicationService {
 
     public PublicationDTO publicationCreate(PublicationDTO publicationDTO);
 
-    public PublicationResponse getAllPublications(int pageNo,int pageSize);
+    public PublicationResponse getAllPublications(int pageNo,int pageSize, String sortBy, String sortDir);
 
     public PublicationDTO getPublicationById(long id);
     
