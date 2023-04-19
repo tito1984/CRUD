@@ -13,7 +13,7 @@ public class ResourceNotFoundException extends RuntimeException {
     private long valueOfField;
 
     public ResourceNotFoundException(String nameOfTheRecurse, String nameOfField, long valueOfField) {
-        super(String.format("%s Not founded with : %s : '%s'", nameOfTheRecurse, nameOfField, valueOfField));
+        super(String.format("%s not founded with : %s : '%s'", nameOfTheRecurse, nameOfField, valueOfField));
         this.nameOfTheRecurse = nameOfTheRecurse;
         this.nameOfField = nameOfField;
         this.valueOfField = valueOfField;
