@@ -1,6 +1,5 @@
 package com.example.crud.todo.crud.service;
 
-import java.util.List;
 
 import com.example.crud.todo.crud.dto.PublicationDTO;
 import com.example.crud.todo.crud.dto.PublicationResponse;
