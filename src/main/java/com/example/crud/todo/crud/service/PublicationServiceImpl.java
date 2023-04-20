@@ -3,6 +3,7 @@ package com.example.crud.todo.crud.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,9 @@ import com.example.crud.todo.crud.repository.PublicationRepository;
 
 @Service
 public class PublicationServiceImpl implements PublicationService {
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
     private PublicationRepository publicationRepository;
@@ -35,13 +39,15 @@ public class PublicationServiceImpl implements PublicationService {
 
     @Override
     public PublicationResponse getAllPublications(int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
-        PageRequest pageable = PageRequest.of(pageNo,pageSize,sort);
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        PageRequest pageable = PageRequest.of(pageNo, pageSize, sort);
 
         Page<Publication> publications = publicationRepository.findAll(pageable);
 
         List<Publication> publicationList = publications.getContent();
-        List<PublicationDTO> content = publicationList.stream().map(publication -> mapDTO(publication)).collect(Collectors.toList());
+        List<PublicationDTO> content = publicationList.stream().map(publication -> mapDTO(publication))
+                .collect(Collectors.toList());
 
         PublicationResponse publicationResponse = new PublicationResponse();
         publicationResponse.setContent(content);
@@ -52,29 +58,6 @@ public class PublicationServiceImpl implements PublicationService {
         publicationResponse.setLastPage(publications.isLast());
 
         return publicationResponse;
-    }
-
-    // Convert from entity to DTO
-    private PublicationDTO mapDTO(Publication publication) {
-        PublicationDTO publicationDTO = new PublicationDTO();
-
-        publicationDTO.setId(publication.getId());
-        publicationDTO.setTitle(publication.getTitle());
-        publicationDTO.setDescription(publication.getDescription());
-        publicationDTO.setContent(publication.getContent());
-
-        return publicationDTO;
-    }
-
-    // Converto from DTO to entity
-    private Publication mapEntity(PublicationDTO publicationDTO) {
-        Publication publication = new Publication();
-
-        publication.setTitle(publicationDTO.getTitle());
-        publication.setDescription(publicationDTO.getDescription());
-        publication.setContent(publicationDTO.getContent());
-
-        return publication;
     }
 
     @Override
@@ -106,4 +89,19 @@ public class PublicationServiceImpl implements PublicationService {
 
         publicationRepository.delete(publication);
     }
+
+    // Convert from entity to DTO
+    private PublicationDTO mapDTO(Publication publication) {
+        PublicationDTO publicationDTO = modelMapper.map(publication, PublicationDTO.class);
+
+        return publicationDTO;
+    }
+
+    // Converto from DTO to entity
+    private Publication mapEntity(PublicationDTO publicationDTO) {
+        Publication publication = modelMapper.map(publicationDTO, Publication.class);
+
+        return publication;
+    }
+
 }

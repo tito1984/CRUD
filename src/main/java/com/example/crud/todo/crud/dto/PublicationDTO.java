@@ -1,11 +1,16 @@
 package com.example.crud.todo.crud.dto;
 
+import java.util.Set;
+
+import com.example.crud.todo.crud.entities.Comments;
+
 public class PublicationDTO {
 
     private Long id;
     private String title;
     private String description;
     private String content;
+    private Set<Comments> comments;
 
     public Long getId() {
         return id;
@@ -41,6 +46,14 @@ public class PublicationDTO {
 
     public PublicationDTO() {
         super();
+    }
+
+    public Set<Comments> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comments> comments) {
+        this.comments = comments;
     }
 
 }

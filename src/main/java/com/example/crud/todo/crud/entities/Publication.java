@@ -3,6 +3,8 @@ package com.example.crud.todo.crud.entities;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,6 +32,7 @@ public class Publication {
     @Column(name = "content", nullable = false)
     private String content;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Comments> comments = new HashSet<>();
 
@@ -43,6 +46,14 @@ public class Publication {
 
     public String getTitle() {
         return title;
+    }
+
+    public Set<Comments> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comments> comments) {
+        this.comments = comments;
     }
 
     public void setTitle(String title) {

@@ -3,6 +3,7 @@ package com.example.crud.todo.crud.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ import com.example.crud.todo.crud.repository.PublicationRepository;
 
 @Service
 public class CommentsServiceImpl implements CommentsService {
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
     private CommentRepository commentRepository;
@@ -35,26 +39,6 @@ public class CommentsServiceImpl implements CommentsService {
         Comments newComments = commentRepository.save(comments);
 
         return mapDTO(newComments);
-    }
-
-    private CommentsDTO mapDTO(Comments comments) {
-        CommentsDTO commentsDTO = new CommentsDTO();
-        commentsDTO.setId(comments.getId());
-        commentsDTO.setName(comments.getName());
-        commentsDTO.setEmail(comments.getEmail());
-        commentsDTO.setBody(comments.getBody());
-
-        return commentsDTO;
-    }
-
-    private Comments mapEntity(CommentsDTO commentsDTO) {
-        Comments comments = new Comments();
-        comments.setId(commentsDTO.getId());
-        comments.setName(commentsDTO.getName());
-        comments.setEmail(commentsDTO.getEmail());
-        comments.setBody(commentsDTO.getBody());
-
-        return comments;
     }
 
     @Override
@@ -116,6 +100,18 @@ public class CommentsServiceImpl implements CommentsService {
         }
 
         commentRepository.delete(comments);
+    }
+
+    private CommentsDTO mapDTO(Comments comments) {
+        CommentsDTO commentsDTO = modelMapper.map(comments, CommentsDTO.class);
+
+        return commentsDTO;
+    }
+
+    private Comments mapEntity(CommentsDTO commentsDTO) {
+        Comments comments = modelMapper.map(commentsDTO, Comments.class);
+
+        return comments;
     }
 
 }
