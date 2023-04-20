@@ -72,7 +72,7 @@ public class CommentsServiceImpl implements CommentsService {
 
         Comments comments = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Comment", "ID", commentId));
-        
+
         if (!comments.getPublication().getId().equals(publication.getId())) {
             throw new BlogAppException(HttpStatus.BAD_REQUEST, "Comment not belongs to that publication");
         }
@@ -81,14 +81,14 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
-    public CommentsDTO updateComment(Long publicationId,Long commentId, CommentsDTO applicationComment) {
+    public CommentsDTO updateComment(Long publicationId, Long commentId, CommentsDTO applicationComment) {
         Publication publication = publicationRepository
                 .findById(publicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Publication", "id", publicationId));
 
         Comments comments = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Comment", "ID", commentId));
-        
+
         if (!comments.getPublication().getId().equals(publication.getId())) {
             throw new BlogAppException(HttpStatus.BAD_REQUEST, "Comment not belongs to that publication");
         }
@@ -100,6 +100,22 @@ public class CommentsServiceImpl implements CommentsService {
         Comments commentUpdate = commentRepository.save(comments);
 
         return mapDTO(commentUpdate);
+    }
+
+    @Override
+    public void deleteComment(Long publicationId, Long commentId) {
+        Publication publication = publicationRepository
+                .findById(publicationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Publication", "id", publicationId));
+
+        Comments comments = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Comment", "ID", commentId));
+
+        if (!comments.getPublication().getId().equals(publication.getId())) {
+            throw new BlogAppException(HttpStatus.BAD_REQUEST, "Comment not belongs to that publication");
+        }
+
+        commentRepository.delete(comments);
     }
 
 }

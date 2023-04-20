@@ -13,4 +13,6 @@ public interface CommentsService {
     public CommentsDTO getCommentsById(Long publicationId, Long commentId);
 
     public CommentsDTO updateComment(Long publicationId,Long commentId, CommentsDTO applicationComment);
+
+    public void deleteComment(Long publicationId,Long commentId);
 }
