@@ -19,6 +19,8 @@ import com.example.crud.todo.crud.dto.PublicationResponse;
 import com.example.crud.todo.crud.service.PublicationService;
 import com.example.crud.todo.crud.utilities.AppConstants;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/publications")
 public class PublicationController {
@@ -41,13 +43,13 @@ public class PublicationController {
     }
 
     @PostMapping
-    public ResponseEntity<PublicationDTO> savePublication(@RequestBody PublicationDTO publicationDTO) {
+    public ResponseEntity<PublicationDTO> savePublication(@Valid @RequestBody PublicationDTO publicationDTO) {
         return new ResponseEntity<PublicationDTO>(publicationService.publicationCreate(publicationDTO),
                 HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PublicationDTO> updatePublication(@RequestBody PublicationDTO publicationDTO,
+    public ResponseEntity<PublicationDTO> updatePublication(@Valid @RequestBody PublicationDTO publicationDTO,
             @PathVariable(name = "id") long id) {
         PublicationDTO publicationResponse = publicationService.updatePublication(publicationDTO, id);
         return new ResponseEntity<>(publicationResponse, HttpStatus.OK);

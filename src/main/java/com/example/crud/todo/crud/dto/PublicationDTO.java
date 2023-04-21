@@ -4,12 +4,25 @@ import java.util.Set;
 
 import com.example.crud.todo.crud.entities.Comments;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
 public class PublicationDTO {
 
     private Long id;
+
+    @NotEmpty
+    @Size(min = 2,message = "Title must have at least 2 characters")
     private String title;
+
+    @NotEmpty
+    @Size(min = 10,message = "Description must have at least 10 characters")
     private String description;
+
+    @NotEmpty
+    @Size(min = 10,message = "Content must have at least 10 characters")
     private String content;
+
     private Set<Comments> comments;
 
     public Long getId() {

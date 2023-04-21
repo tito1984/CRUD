@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.crud.todo.crud.dto.CommentsDTO;
 import com.example.crud.todo.crud.service.CommentsService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/")
 public class CommentsController {
@@ -42,27 +44,27 @@ public class CommentsController {
 
     @PostMapping("/publication/{publicationId}/comments")
     public ResponseEntity<CommentsDTO> saveComment(
-            @PathVariable(value = "publicationId") long publicationId, @RequestBody CommentsDTO commentsDTO) {
+            @Valid @PathVariable(value = "publicationId") long publicationId, @RequestBody CommentsDTO commentsDTO) {
         return new ResponseEntity<>(commentsService.createComment(publicationId, commentsDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/publication/{publicationId}/comments/{commentId}")
     public ResponseEntity<CommentsDTO> updateComment(
-            @PathVariable(value = "publicationId") long publicationId, @PathVariable(value = "commentId") long commentId,
-            @RequestBody CommentsDTO commentsDTO) {
-        
-        CommentsDTO commentUdated = commentsService.updateComment(publicationId, commentId, commentsDTO);
-        return new ResponseEntity<>(commentUdated,HttpStatus.OK);
-    }
+            @PathVariable(value = "publicationId") long publicationId,
+            @PathVariable(value = "commentId") long commentId,
+            @Valid @RequestBody CommentsDTO commentsDTO) {
 
+        CommentsDTO commentUdated = commentsService.updateComment(publicationId, commentId, commentsDTO);
+        return new ResponseEntity<>(commentUdated, HttpStatus.OK);
+    }
 
     @DeleteMapping("/publication/{publicationId}/comments/{commentId}")
     public ResponseEntity<String> deleteComment(
-        @PathVariable(value = "publicationId") long publicationId,
-        @PathVariable(value = "commentId") long commentId) {
+            @PathVariable(value = "publicationId") long publicationId,
+            @PathVariable(value = "commentId") long commentId) {
 
-            commentsService.deleteComment(publicationId,commentId);
+        commentsService.deleteComment(publicationId, commentId);
 
-            return new ResponseEntity<>("Comment deleted successfully",HttpStatus.OK);
-        }
+        return new ResponseEntity<>("Comment deleted successfully", HttpStatus.OK);
+    }
 }
