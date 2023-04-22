@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 
 @Entity
 @Table(name = "comments")
@@ -65,6 +66,7 @@ public class Comments {
         this.publication = publication;
     }
 
+    @Builder
     public Comments(long id, String name, String email, String body, Publication publication) {
         super();
         this.id = id;
@@ -78,5 +80,6 @@ public class Comments {
         super();
     }
 
+   
     
 }

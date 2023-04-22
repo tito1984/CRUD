@@ -14,6 +14,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.Builder;
+
 
 @Entity
 @Table(name = "publications", uniqueConstraints = { @UniqueConstraint(columnNames = { "title" }) })
@@ -80,6 +82,7 @@ public class Publication {
         super();
     }
 
+    @Builder
     public Publication(Long id, String title, String description, String content) {
         super();
         this.id = id;
