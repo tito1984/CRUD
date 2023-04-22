@@ -22,10 +22,7 @@ import com.example.crud.todo.crud.entities.Publication;
 // getPublicationById
 // -Comprobar que te devuelve la publicacion del id dado
 // updatePublication
-// -Comprobar que el titulo no esta vacio y tiene ms de 2 caracteres
-// -Comprobar que el descripcion no esta vacio y tiene mas de 10 caraacteres
-// -Comprobar que el contenido del comentario tenga al menos 10 caracteres
-// -Comprobar que se modifica la publicacion del id dado
+// -Comprobar que se modifica toda la publicacion correctamente
 // deletePublication
 // -Comprobar que se borra el comentario del id dado
 

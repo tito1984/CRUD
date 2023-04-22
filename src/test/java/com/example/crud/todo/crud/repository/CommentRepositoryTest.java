@@ -18,19 +18,15 @@ import com.example.crud.todo.crud.entities.Publication;
 
 // TODO LIST
 // Create comment
-// -Comprobar que el nombre no esta vacio
-// -Comprobar que el email no esta vacio
-// -Comprobar que cuerpo del comentario tenga al menos 10 caracteres
+// -Comprobar que se guarda el comentario
+// -Comprobar que lo guarda con el id correcto
 // GetCommentsByPublicationId
 // -Comprobar que te devuelve todos los elementos de la lista
 // -Comprobar que te devuelve los elementos del id de publicacion dado
 // GetCommentsById
 // -Comprobar que te devuelve el comentario del id dado
 // UpdateComment
-// -Comprobar que el nombre no esta vacio
-// -Comprobar que el email no esta vacio
-// -Comprobar que cuerpo del comentario tenga al menos 10 caracteres
-// -Comprobar que se modifica el comentario del id dado
+// -Comprobar que se modifica el comentario del id dado correctamente
 // DeleteComment
 // -Comprobar que se borra el comentario del id dado
 
