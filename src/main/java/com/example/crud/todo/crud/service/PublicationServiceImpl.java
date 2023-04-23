@@ -3,7 +3,6 @@ package com.example.crud.todo.crud.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,20 +18,20 @@ import com.example.crud.todo.crud.repository.PublicationRepository;
 @Service
 public class PublicationServiceImpl implements PublicationService {
 
-    @Autowired
-    private ModelMapper modelMapper;
-
+    
     @Autowired
     private PublicationRepository publicationRepository;
 
     @Override
     public PublicationDTO publicationCreate(PublicationDTO publicationDTO) {
 
-        Publication publication = mapEntity(publicationDTO);
+        Publication publication = new Publication();
+        
+        publication.mapDTO(publicationDTO);
 
         Publication newPublication = publicationRepository.save(publication);
 
-        PublicationDTO publicationAnswerDto = mapDTO(newPublication);
+        PublicationDTO publicationAnswerDto = newPublication.mapEntity();
 
         return publicationAnswerDto;
     }
@@ -46,7 +45,7 @@ public class PublicationServiceImpl implements PublicationService {
         Page<Publication> publications = publicationRepository.findAll(pageable);
 
         List<Publication> publicationList = publications.getContent();
-        List<PublicationDTO> content = publicationList.stream().map(publication -> mapDTO(publication))
+        List<PublicationDTO> content = publicationList.stream().map(publication -> publication.mapEntity())
                 .collect(Collectors.toList());
 
         PublicationResponse publicationResponse = new PublicationResponse();
@@ -65,7 +64,7 @@ public class PublicationServiceImpl implements PublicationService {
         Publication publication = publicationRepository
                 .findById(id).orElseThrow(() -> new ResourceNotFoundException("Publication", "id", id));
 
-        return mapDTO(publication);
+        return publication.mapEntity();
     }
 
     @Override
@@ -79,7 +78,7 @@ public class PublicationServiceImpl implements PublicationService {
 
         Publication publicationUpdated = publicationRepository.save(publication);
 
-        return mapDTO(publicationUpdated);
+        return publicationUpdated.mapEntity();
     }
 
     @Override
@@ -90,18 +89,5 @@ public class PublicationServiceImpl implements PublicationService {
         publicationRepository.delete(publication);
     }
 
-    // Convert from entity to DTO
-    private PublicationDTO mapDTO(Publication publication) {
-        PublicationDTO publicationDTO = modelMapper.map(publication, PublicationDTO.class);
-
-        return publicationDTO;
-    }
-
-    // Converto from DTO to entity
-    private Publication mapEntity(PublicationDTO publicationDTO) {
-        Publication publication = modelMapper.map(publicationDTO, Publication.class);
-
-        return publication;
-    }
-
+    
 }

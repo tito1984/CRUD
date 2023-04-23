@@ -1,5 +1,7 @@
 package com.example.crud.todo.crud.entities;
 
+import com.example.crud.todo.crud.dto.CommentsDTO;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -80,6 +82,21 @@ public class Comments {
         super();
     }
 
-   
-    
+    public CommentsDTO mapEntity(){
+        CommentsDTO commentsDTO = new CommentsDTO();
+        commentsDTO.setName(this.name);
+        commentsDTO.setEmail(this.email);
+        commentsDTO.setBody(this.body);
+
+        return commentsDTO;
+    }
+
+    public Comments mapDTO(CommentsDTO commentsDTO){
+        Comments comments = new Comments();
+        comments.setName(commentsDTO.getName());
+        comments.setEmail(commentsDTO.getEmail());
+        comments.setBody(commentsDTO.getBody());
+
+        return comments;
+    }
 }

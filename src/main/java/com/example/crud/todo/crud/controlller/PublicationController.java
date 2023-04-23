@@ -38,7 +38,7 @@ public class PublicationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PublicationDTO> optenerPublicationById(@PathVariable(name = "id") long id) {
+    public ResponseEntity<PublicationDTO> getPublicationById(@PathVariable(name = "id") long id) {
         return ResponseEntity.ok(publicationService.getPublicationById(id));
     }
 

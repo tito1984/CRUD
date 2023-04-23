@@ -6,6 +6,7 @@ import com.example.crud.todo.crud.entities.Comments;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
 public class PublicationDTO {
 
@@ -69,4 +70,14 @@ public class PublicationDTO {
         this.comments = comments;
     }
 
+    @Builder
+    public PublicationDTO(@NotEmpty @Size(min = 2, message = "Title must have at least 2 characters") String title,
+            @NotEmpty @Size(min = 10, message = "Description must have at least 10 characters") String description,
+            @NotEmpty @Size(min = 10, message = "Content must have at least 10 characters") String content) {
+        this.title = title;
+        this.description = description;
+        this.content = content;
+    }
+
+    
 }

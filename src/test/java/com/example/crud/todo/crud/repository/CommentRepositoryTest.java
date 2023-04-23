@@ -1,18 +1,13 @@
 package com.example.crud.todo.crud.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.isNotNull;
-
 import java.util.List;
 import java.util.Optional;
 
-import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import com.example.crud.todo.crud.entities.Comments;
 import com.example.crud.todo.crud.entities.Publication;
 

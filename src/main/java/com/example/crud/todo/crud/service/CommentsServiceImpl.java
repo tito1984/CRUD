@@ -3,7 +3,6 @@ package com.example.crud.todo.crud.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,9 +19,6 @@ import com.example.crud.todo.crud.repository.PublicationRepository;
 public class CommentsServiceImpl implements CommentsService {
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
     private CommentRepository commentRepository;
 
     @Autowired
@@ -30,7 +26,8 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     public CommentsDTO createComment(long publicationId, CommentsDTO commentsDTO) {
-        Comments comments = mapEntity(commentsDTO);
+        Comments comments = new Comments();
+        comments.mapDTO(commentsDTO);
         Publication publication = publicationRepository
                 .findById(publicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Publication", "id", publicationId));
@@ -38,14 +35,14 @@ public class CommentsServiceImpl implements CommentsService {
         comments.setPublication(publication);
         Comments newComments = commentRepository.save(comments);
 
-        return mapDTO(newComments);
+        return newComments.mapEntity();
     }
 
     @Override
     public List<CommentsDTO> getCommentsByPublicationId(long publicationId) {
         List<Comments> comments = commentRepository.findByPublicationId(publicationId);
 
-        return comments.stream().map(comment -> mapDTO(comment)).collect(Collectors.toList());
+        return comments.stream().map(comment -> comment.mapEntity()).collect(Collectors.toList());
     }
 
     @Override
@@ -61,7 +58,7 @@ public class CommentsServiceImpl implements CommentsService {
             throw new BlogAppException(HttpStatus.BAD_REQUEST, "Comment not belongs to that publication");
         }
 
-        return mapDTO(comments);
+        return comments.mapEntity();
     }
 
     @Override
@@ -83,7 +80,7 @@ public class CommentsServiceImpl implements CommentsService {
 
         Comments commentUpdate = commentRepository.save(comments);
 
-        return mapDTO(commentUpdate);
+        return commentUpdate.mapEntity();
     }
 
     @Override
@@ -100,18 +97,6 @@ public class CommentsServiceImpl implements CommentsService {
         }
 
         commentRepository.delete(comments);
-    }
-
-    private CommentsDTO mapDTO(Comments comments) {
-        CommentsDTO commentsDTO = modelMapper.map(comments, CommentsDTO.class);
-
-        return commentsDTO;
-    }
-
-    private Comments mapEntity(CommentsDTO commentsDTO) {
-        Comments comments = modelMapper.map(commentsDTO, Comments.class);
-
-        return comments;
     }
 
 }

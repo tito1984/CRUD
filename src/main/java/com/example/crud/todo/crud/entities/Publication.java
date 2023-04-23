@@ -3,6 +3,7 @@ package com.example.crud.todo.crud.entities;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.example.crud.todo.crud.dto.PublicationDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
@@ -91,5 +92,22 @@ public class Publication {
         this.content = content;
     }
 
+    public PublicationDTO mapEntity(){
+        PublicationDTO publicationDTO = new PublicationDTO();
+        publicationDTO.setTitle(this.title);
+        publicationDTO.setDescription(this.description);
+        publicationDTO.setContent(this.content);
+
+        return publicationDTO;
+    }
+
+    public Publication mapDTO(PublicationDTO publicationDTO){
+        Publication publication = new Publication();
+        publication.setTitle(publicationDTO.getTitle());
+        publication.setDescription(publicationDTO.getDescription());
+        publication.setContent(publicationDTO.getContent());
+
+        return publication;
+    }
     
 }
