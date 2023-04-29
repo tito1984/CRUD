@@ -2,6 +2,9 @@ package com.example.crud.todo.crud.dto;
 
 import java.util.List;
 
+import lombok.Builder;
+
+@Builder
 public class PublicationResponse {
 
     private List<PublicationDTO> content;
@@ -10,6 +13,16 @@ public class PublicationResponse {
     private long totalElements;
     private int totalPages;
     private boolean lastPage;
+
+    public PublicationResponse(List<PublicationDTO> content, int pageNumber, int pageSize, long totalElements,
+            int totalPages, boolean lastPage) {
+        this.content = content;
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
+        this.totalElements = totalElements;
+        this.totalPages = totalPages;
+        this.lastPage = lastPage;
+    }
 
     public List<PublicationDTO> getContent() {
         return content;

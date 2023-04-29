@@ -94,9 +94,11 @@ public class Publication {
 
     public PublicationDTO mapEntity(){
         PublicationDTO publicationDTO = new PublicationDTO();
+        publicationDTO.setId(this.id);
         publicationDTO.setTitle(this.title);
         publicationDTO.setDescription(this.description);
         publicationDTO.setContent(this.content);
+        publicationDTO.setComments(this.comments);
 
         return publicationDTO;
     }

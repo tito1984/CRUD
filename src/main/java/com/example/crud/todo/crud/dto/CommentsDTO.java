@@ -3,6 +3,7 @@ package com.example.crud.todo.crud.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
 public class CommentsDTO {
 
@@ -53,6 +54,16 @@ public class CommentsDTO {
 
     public CommentsDTO() {
         super();
+    }
+
+    @Builder
+    public CommentsDTO(long id, @NotEmpty(message = "Name can not be empty") String name,
+            @NotEmpty(message = "Email can not be empty") @Email String email,
+            @NotEmpty @Size(min = 10, message = "Body must have at least 10 character") String body) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.body = body;
     }
 
 }

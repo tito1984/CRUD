@@ -1,6 +1,8 @@
 package com.example.crud.todo.crud.controlller;
 
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +40,13 @@ public class PublicationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PublicationDTO> getPublicationById(@PathVariable(name = "id") long id) {
-        return ResponseEntity.ok(publicationService.getPublicationById(id));
+    public ResponseEntity<PublicationDTO> getPublicationById(@PathVariable(name = "id") long id) {  
+        try {
+            return ResponseEntity.ok(publicationService.getPublicationById(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(publicationService.getPublicationById(id));
+        }      
+        
     }
 
     @PostMapping
@@ -51,13 +58,21 @@ public class PublicationController {
     @PutMapping("/{id}")
     public ResponseEntity<PublicationDTO> updatePublication(@Valid @RequestBody PublicationDTO publicationDTO,
             @PathVariable(name = "id") long id) {
-        PublicationDTO publicationResponse = publicationService.updatePublication(publicationDTO, id);
-        return new ResponseEntity<>(publicationResponse, HttpStatus.OK);
+        try {
+            PublicationDTO publicationResponse = publicationService.updatePublication(publicationDTO, id);
+            return new ResponseEntity<>(publicationResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(publicationService.updatePublication(publicationDTO, id));
+        }       
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePublication(@PathVariable(name = "id") long id) {
-        publicationService.deletePublication(id);
-        return new ResponseEntity<>("Publication deleted successfully", HttpStatus.OK);
+        try {
+            publicationService.deletePublication(id);
+            return new ResponseEntity<>("Publication deleted successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Not found", HttpStatus.NOT_FOUND);
+        }        
     }
 }
