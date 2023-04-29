@@ -1,4 +1,4 @@
-package com.example.crud.todo.crud.controlller;
+package com.example.crud.todo.crud.controller;
 
 import java.util.List;
 
@@ -20,45 +20,45 @@ import com.example.crud.todo.crud.service.CommentsService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/publications")
 public class CommentsController {
 
     @Autowired
     private CommentsService commentsService;
 
-    @GetMapping("/publication/{publicationId}/comments")
+    @GetMapping("/{publicationId}/comments")
     public List<CommentsDTO> commentsListByPublicationId(@PathVariable(value = "publicationId") long publicationId) {
         return commentsService.getCommentsByPublicationId(publicationId);
     }
 
-    @GetMapping("/publication/{publicationId}/comments/{commentId}")
+    @GetMapping("/{publicationId}/comments/{commentId}")
     public ResponseEntity<CommentsDTO> getCommentByIdFromPublicationId(
             @PathVariable(value = "publicationId") long publicationId,
             @PathVariable(value = "commentId") long commentId) {
 
         CommentsDTO commentsDTO = commentsService.getCommentsById(publicationId, commentId);
 
-        return new ResponseEntity<>(commentsDTO, HttpStatus.OK);
+        return new ResponseEntity<CommentsDTO>(commentsDTO, HttpStatus.OK);
 
     }
 
-    @PostMapping("/publication/{publicationId}/comments")
+    @PostMapping("/{publicationId}/comments")
     public ResponseEntity<CommentsDTO> saveComment(
             @Valid @PathVariable(value = "publicationId") long publicationId, @RequestBody CommentsDTO commentsDTO) {
-        return new ResponseEntity<>(commentsService.createComment(publicationId, commentsDTO), HttpStatus.CREATED);
+        return new ResponseEntity<CommentsDTO>(commentsService.createComment(publicationId, commentsDTO), HttpStatus.CREATED);
     }
 
-    @PutMapping("/publication/{publicationId}/comments/{commentId}")
+    @PutMapping("/{publicationId}/comments/{commentId}")
     public ResponseEntity<CommentsDTO> updateComment(
             @PathVariable(value = "publicationId") long publicationId,
             @PathVariable(value = "commentId") long commentId,
             @Valid @RequestBody CommentsDTO commentsDTO) {
 
         CommentsDTO commentUdated = commentsService.updateComment(publicationId, commentId, commentsDTO);
-        return new ResponseEntity<>(commentUdated, HttpStatus.OK);
+        return ResponseEntity.ok(commentUdated);
     }
 
-    @DeleteMapping("/publication/{publicationId}/comments/{commentId}")
+    @DeleteMapping("/{publicationId}/comments/{commentId}")
     public ResponseEntity<String> deleteComment(
             @PathVariable(value = "publicationId") long publicationId,
             @PathVariable(value = "commentId") long commentId) {

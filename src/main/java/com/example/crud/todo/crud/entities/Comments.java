@@ -15,7 +15,7 @@ import lombok.Builder;
 @Entity
 @Table(name = "comments")
 public class Comments {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -25,7 +25,7 @@ public class Comments {
     private String body;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "publication_id",nullable = false)
+    @JoinColumn(name = "publication_id", nullable = false)
     private Publication publication;
 
     public long getId() {
@@ -82,7 +82,7 @@ public class Comments {
         super();
     }
 
-    public CommentsDTO mapEntity(){
+    public CommentsDTO mapEntity() {
         CommentsDTO commentsDTO = new CommentsDTO();
         commentsDTO.setName(this.name);
         commentsDTO.setEmail(this.email);
@@ -91,12 +91,10 @@ public class Comments {
         return commentsDTO;
     }
 
-    public Comments mapDTO(CommentsDTO commentsDTO){
-        Comments comments = new Comments();
-        comments.setName(commentsDTO.getName());
-        comments.setEmail(commentsDTO.getEmail());
-        comments.setBody(commentsDTO.getBody());
-
-        return comments;
+    public Comments mapDTO(CommentsDTO commentsDTO) {
+        this.setName(commentsDTO.getName());
+        this.setEmail(commentsDTO.getEmail());
+        this.setBody(commentsDTO.getBody());
+        return this;
     }
 }

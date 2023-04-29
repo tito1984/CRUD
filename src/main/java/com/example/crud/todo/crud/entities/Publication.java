@@ -103,13 +103,11 @@ public class Publication {
         return publicationDTO;
     }
 
-    public Publication mapDTO(PublicationDTO publicationDTO){
-        Publication publication = new Publication();
-        publication.setTitle(publicationDTO.getTitle());
-        publication.setDescription(publicationDTO.getDescription());
-        publication.setContent(publicationDTO.getContent());
-
-        return publication;
+    public Publication mapDTO(PublicationDTO publicationDTO){        
+        this.setTitle(publicationDTO.getTitle());
+        this.setDescription(publicationDTO.getDescription());
+        this.setContent(publicationDTO.getContent());
+        return this;
     }
     
 }

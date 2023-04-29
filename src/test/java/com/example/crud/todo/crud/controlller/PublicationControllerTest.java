@@ -22,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.example.crud.todo.crud.controller.PublicationController;
 import com.example.crud.todo.crud.dto.PublicationDTO;
 import com.example.crud.todo.crud.dto.PublicationResponse;
 import com.example.crud.todo.crud.entities.Publication;
