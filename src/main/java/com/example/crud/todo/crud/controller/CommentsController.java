@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.crud.todo.crud.dto.CommentsDTO;
-import com.example.crud.todo.crud.exceptions.ResourceNotFoundException;
 import com.example.crud.todo.crud.service.CommentsService;
 
 import jakarta.validation.Valid;

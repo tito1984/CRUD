@@ -17,7 +17,7 @@ public class CommentsDTO {
     private String email;
 
     @NotEmpty
-    @Size(min = 10,message = "Body must have at least 10 character")
+    @Size(min = 10, message = "Body must have at least 10 character")
     private String body;
 
     public long getId() {

@@ -18,7 +18,6 @@ import com.example.crud.todo.crud.repository.PublicationRepository;
 @Service
 public class PublicationServiceImpl implements PublicationService {
 
-    
     @Autowired
     private PublicationRepository publicationRepository;
 
@@ -26,7 +25,7 @@ public class PublicationServiceImpl implements PublicationService {
     public PublicationDTO publicationCreate(PublicationDTO publicationDTO) {
 
         Publication publication = new Publication();
-        
+
         publication.mapDTO(publicationDTO);
 
         Publication newPublication = publicationRepository.save(publication);
@@ -89,5 +88,4 @@ public class PublicationServiceImpl implements PublicationService {
         publicationRepository.delete(publication);
     }
 
-    
 }

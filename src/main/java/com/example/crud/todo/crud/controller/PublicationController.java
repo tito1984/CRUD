@@ -37,13 +37,13 @@ public class PublicationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PublicationDTO> getPublicationById(@PathVariable(name = "id") long id) {  
+    public ResponseEntity<PublicationDTO> getPublicationById(@PathVariable(name = "id") long id) {
         try {
             return ResponseEntity.ok(publicationService.getPublicationById(id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(publicationService.getPublicationById(id));
-        }      
-        
+        }
+
     }
 
     @PostMapping
@@ -59,8 +59,9 @@ public class PublicationController {
             PublicationDTO publicationResponse = publicationService.updatePublication(publicationDTO, id);
             return new ResponseEntity<>(publicationResponse, HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(publicationService.updatePublication(publicationDTO, id));
-        }       
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(publicationService.updatePublication(publicationDTO, id));
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -70,6 +71,6 @@ public class PublicationController {
             return new ResponseEntity<>("Publication deleted successfully", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Not found", HttpStatus.NOT_FOUND);
-        }        
+        }
     }
 }

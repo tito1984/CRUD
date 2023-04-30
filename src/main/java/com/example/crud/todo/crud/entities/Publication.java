@@ -17,7 +17,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Builder;
 
-
 @Entity
 @Table(name = "publications", uniqueConstraints = { @UniqueConstraint(columnNames = { "title" }) })
 public class Publication {
@@ -36,7 +35,7 @@ public class Publication {
     private String content;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comments> comments = new HashSet<>();
 
     public Long getId() {
@@ -92,7 +91,7 @@ public class Publication {
         this.content = content;
     }
 
-    public PublicationDTO mapEntity(){
+    public PublicationDTO mapEntity() {
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setId(this.id);
         publicationDTO.setTitle(this.title);
@@ -103,11 +102,11 @@ public class Publication {
         return publicationDTO;
     }
 
-    public Publication mapDTO(PublicationDTO publicationDTO){        
+    public Publication mapDTO(PublicationDTO publicationDTO) {
         this.setTitle(publicationDTO.getTitle());
         this.setDescription(publicationDTO.getDescription());
         this.setContent(publicationDTO.getContent());
         return this;
     }
-    
+
 }
