@@ -26,9 +26,9 @@ import com.example.crud.todo.crud.controller.PublicationController;
 import com.example.crud.todo.crud.dto.PublicationDTO;
 import com.example.crud.todo.crud.dto.PublicationResponse;
 import com.example.crud.todo.crud.entities.Publication;
+import com.example.crud.todo.crud.exceptions.ResourceNotFoundException;
 import com.example.crud.todo.crud.service.PublicationService;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;;
 
 @WebMvcTest(controllers = PublicationController.class)
@@ -77,6 +77,19 @@ public class PublicationControllerTest {
     }
 
     @Test
+    void testDeletePublicationNotFound() throws Exception{
+        long publicationId = 1L;
+        willThrow(ResourceNotFoundException.class).given(publicationService).deletePublication(publicationId);
+
+        ResultActions response = mockMvc.perform(delete("/api/publications/{id}",publicationId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andExpect(status().isNotFound())
+                .andDo(print());
+
+    }
+
+    @Test
     void testListPublications() throws Exception{
 
         PublicationResponse publicationResponse = PublicationResponse.builder().pageNumber(1)
@@ -113,7 +126,20 @@ public class PublicationControllerTest {
     }
 
     @Test
-    void testSavePublication() throws JsonProcessingException, Exception {
+    void testGetPublicationByIdNotfound() throws Exception {        
+        Long publicationId = 1L;
+        when(publicationService.getPublicationById(publicationId)).thenThrow(ResourceNotFoundException.class);
+
+        ResultActions response = mockMvc.perform(get("/api/publications/{id}",publicationId)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(publicationDTO)));
+
+        response.andDo(print())
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testSavePublication() throws Exception {
         
         given(publicationService.publicationCreate(ArgumentMatchers.any()))
             .willAnswer((Invocation) -> Invocation.getArgument(0));
@@ -151,6 +177,28 @@ public class PublicationControllerTest {
                 .andExpect(jsonPath("$.title",is(publication2.getTitle())))
                 .andExpect(jsonPath("$.description",is(publication2.getDescription())))
                 .andExpect(jsonPath("$.content",is(publication2.getContent())));
+        
+    }
+
+    @Test
+    void testUpdatePublicationNotFound() throws Exception{
+        long publicationId = 1L;
+
+        PublicationDTO publication2 = PublicationDTO.builder()
+            .title("Nueva publicacion2")
+            .description("Publicacion nueva2")
+            .content("Esta es la publicacion de la que hablamos2")
+            .build();
+        given(publicationService.getPublicationById(publicationId)).willThrow(ResourceNotFoundException.class);
+        given(publicationService.updatePublication(any(PublicationDTO.class),eq(publicationId)))
+                .willThrow(ResourceNotFoundException.class);
+
+        ResultActions response = mockMvc.perform(put("/api/publications/{id}", publicationId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(publication2)));
+
+                response.andDo(print())
+                .andExpect(status().isNotFound());
         
     }
 }

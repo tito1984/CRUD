@@ -19,7 +19,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.crud.todo.crud.dto.CommentsDTO;
-import com.example.crud.todo.crud.dto.PublicationDTO;
 import com.example.crud.todo.crud.entities.Comments;
 import com.example.crud.todo.crud.entities.Publication;
 import com.example.crud.todo.crud.repository.CommentRepository;
@@ -38,7 +37,6 @@ public class CommentsServiceImplTest {
     CommentsService commentsService = new CommentsServiceImpl();
 
     private Publication publication;
-    private PublicationDTO publicationDTO;
     private Comments comments;
     private CommentsDTO commentsDTO;
 
@@ -46,11 +44,6 @@ public class CommentsServiceImplTest {
     public void init() {
         publication = Publication.builder()
                 .id(1L)
-                .title("esto es una publicacion")
-                .description("Esta es la descripcion")
-                .content("Eto es el contenido")
-                .build();
-        publicationDTO =PublicationDTO.builder()
                 .title("esto es una publicacion")
                 .description("Esta es la descripcion")
                 .content("Eto es el contenido")

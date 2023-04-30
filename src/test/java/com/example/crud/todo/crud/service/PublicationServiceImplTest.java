@@ -47,7 +47,7 @@ public class PublicationServiceImplTest {
 
     @Test
     void testGetAllPublications() {
-        PublicationResponse publicationResponse = Mockito.mock(PublicationResponse.class);
+         Mockito.mock(PublicationResponse.class);
         Page<Publication> publications = Mockito.mock(Page.class);
 
         when(publicationRepository.findAll(Mockito.any(PageRequest.class))).thenReturn(publications);
