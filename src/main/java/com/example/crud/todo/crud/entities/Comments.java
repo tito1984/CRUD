@@ -84,6 +84,7 @@ public class Comments {
 
     public CommentsDTO mapEntity() {
         CommentsDTO commentsDTO = new CommentsDTO();
+        commentsDTO.setId(this.id);
         commentsDTO.setName(this.name);
         commentsDTO.setEmail(this.email);
         commentsDTO.setBody(this.body);
