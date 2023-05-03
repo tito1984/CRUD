@@ -24,6 +24,7 @@ import com.example.crud.todo.crud.controller.CommentsController;
 import com.example.crud.todo.crud.dto.CommentsDTO;
 import com.example.crud.todo.crud.entities.Comments;
 import com.example.crud.todo.crud.entities.Publication;
+import com.example.crud.todo.crud.exceptions.BlogAppException;
 import com.example.crud.todo.crud.exceptions.ResourceNotFoundException;
 import com.example.crud.todo.crud.service.CommentsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -67,6 +68,39 @@ public class CommentsControllerTest {
                 .build();
         
     }
+
+    @Test
+    void testCreateComment() throws Exception{
+        long publicationId = 1;
+
+        when(commentsService.createComment(anyLong(), any(CommentsDTO.class))).thenReturn(commentsDTO);
+
+        ResultActions response = mockMvc.perform(post("/api/publications/{publicationId}/comments", publicationId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(commentsDTO)));
+
+
+        response.andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name",is(commentsDTO.getName())))
+                .andExpect(jsonPath("$.email",is(commentsDTO.getEmail())))
+                .andExpect(jsonPath("$.body",is(commentsDTO.getBody())));
+
+    }
+
+    @Test
+    void testCreateCommentNotFound() throws Exception{
+        long publicationId = 1L;
+        when(commentsService.createComment(anyLong(), any(CommentsDTO.class))).thenThrow(ResourceNotFoundException.class);
+
+        ResultActions response = mockMvc.perform(post("/api/publications/{publicationId}/comments", publicationId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(commentsDTO)));
+
+        response.andDo(print())
+                .andExpect(status().isNotFound());
+
+    }
     
     @Test
     void testCommentsListByPublicationId() throws Exception{
@@ -98,55 +132,31 @@ public class CommentsControllerTest {
     }
 
     @Test
-    void testDeleteComment() throws Exception{
-        long commentId = 1L;
+    void testGetCommentById() throws Exception {
         long publicationId = 1L;
+        long commentsId = 1L;
 
-        willDoNothing().given(commentsService).deleteComment(publicationId,commentId);
+        when(commentsService.getCommentsById(publicationId,commentsId)).thenReturn(commentsDTO);
 
-        ResultActions response = mockMvc.perform(delete("/api/publications/{publicationId}/comments/{commentId}",publicationId,commentId)
-                .contentType(MediaType.APPLICATION_JSON));
-
-        response.andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    void testDeleteCommentNotFound() throws Exception{
-        long commentId = 1L;
-        long publicationId = 1L;
-
-        willThrow(ResourceNotFoundException.class).given(commentsService).deleteComment(publicationId,commentId);
-
-        ResultActions response = mockMvc.perform(delete("/api/publications/{publicationId}/comments/{commentId}",publicationId,commentId)
-                .contentType(MediaType.APPLICATION_JSON));
-
-        response.andExpect(status().isNotFound())
-                .andDo(print());
-    }
-
-    @Test
-    void testGetCommentByIdFromPublicationId() throws Exception {
-        long publicationId = 1L;
-
-        when(commentsService.getCommentsByPublicationId(publicationId)).thenReturn(Arrays.asList(commentsDTO));
-
-        ResultActions response = mockMvc.perform(get("/api/publications/{publicationId}/comments",publicationId)
+        ResultActions response = mockMvc.perform(get("/api/publications/{publicationId}/comments/{commentId}",publicationId,commentsId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(commentsDTO)));
 
         response.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()",is(Arrays.asList(commentsDTO).size())));
+                .andExpect(jsonPath("$.name",is(comments.getName())))
+                .andExpect(jsonPath("$.email",is(comments.getEmail())))
+                .andExpect(jsonPath("$.body",is(comments.getBody())));
     }
 
     @Test
-    void testGetCommentByIdFromPublicationIdNotFound() throws Exception {
+    void testGetCommentByIdNotFound() throws Exception {
         long publicationId = 1L;
+        long commentsId = 1L;
 
-        when(commentsService.getCommentsByPublicationId(publicationId)).thenThrow(ResourceNotFoundException.class);
+        when(commentsService.getCommentsById(publicationId,commentsId)).thenThrow(ResourceNotFoundException.class);
 
-        ResultActions response = mockMvc.perform(get("/api/publications/{publicationId}/comments",publicationId)
+        ResultActions response = mockMvc.perform(get("/api/publications/{publicationId}/comments/{commentId}",publicationId,commentsId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(commentsDTO)));
 
@@ -155,36 +165,18 @@ public class CommentsControllerTest {
     }
 
     @Test
-    void testSaveComment() throws Exception{
-        long publicationId = 1;
+    void testGetCommentByIdBadRequest() throws Exception {
+        long publicationId = 2L;
+        long commentsId = 1L;
 
-        when(commentsService.createComment(anyLong(), any(CommentsDTO.class))).thenReturn(commentsDTO);
+        when(commentsService.getCommentsById(2L,commentsId)).thenThrow(BlogAppException.class);
 
-        ResultActions response = mockMvc.perform(post("/api/publications/{publicationId}/comments", publicationId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(commentsDTO)));
-
-
-        response.andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name",is(commentsDTO.getName())))
-                .andExpect(jsonPath("$.email",is(commentsDTO.getEmail())))
-                .andExpect(jsonPath("$.body",is(commentsDTO.getBody())));
-
-    }
-
-    @Test
-    void testSaveCommentNotFound() throws Exception{
-        long publicationId = 1L;
-        when(commentsService.createComment(anyLong(), any(CommentsDTO.class))).thenThrow(ResourceNotFoundException.class);
-
-        ResultActions response = mockMvc.perform(post("/api/publications/{publicationId}/comments", publicationId)
+        ResultActions response = mockMvc.perform(get("/api/publications/{publicationId}/comments/{commentId}",publicationId,commentsId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(commentsDTO)));
 
         response.andDo(print())
-                .andExpect(status().isNotFound());
-
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -221,4 +213,63 @@ public class CommentsControllerTest {
         response.andDo(print())
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void testUpdateCommentBadRequest() throws Exception{
+        Long publicationId = 1L;
+        Long commentId = 1L;
+
+        when(commentsService.updateComment(anyLong(), anyLong(), any(CommentsDTO.class))).thenThrow(BlogAppException.class);
+
+        ResultActions response = mockMvc.perform(put("/api/publications/{publicationId}/comments/{commentId}",publicationId,commentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(commentsDTO)));
+              
+
+        response.andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testDeleteComment() throws Exception{
+        long commentId = 1L;
+        long publicationId = 1L;
+
+        willDoNothing().given(commentsService).deleteComment(publicationId,commentId);
+
+        ResultActions response = mockMvc.perform(delete("/api/publications/{publicationId}/comments/{commentId}",publicationId,commentId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void testDeleteCommentNotFound() throws Exception{
+        long commentId = 1L;
+        long publicationId = 1L;
+
+        willThrow(ResourceNotFoundException.class).given(commentsService).deleteComment(publicationId,commentId);
+
+        ResultActions response = mockMvc.perform(delete("/api/publications/{publicationId}/comments/{commentId}",publicationId,commentId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    void testDeleteCommentBadRequest() throws Exception{
+        long commentId = 1L;
+        long publicationId = 1L;
+
+        willThrow(BlogAppException.class).given(commentsService).deleteComment(publicationId,commentId);
+
+        ResultActions response = mockMvc.perform(delete("/api/publications/{publicationId}/comments/{commentId}",publicationId,commentId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
 }

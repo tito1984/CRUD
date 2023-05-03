@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.crud.todo.crud.dto.CommentsDTO;
+import com.example.crud.todo.crud.exceptions.BlogAppException;
+import com.example.crud.todo.crud.exceptions.ResourceNotFoundException;
 import com.example.crud.todo.crud.service.CommentsService;
 
 import jakarta.validation.Valid;
@@ -31,7 +33,7 @@ public class CommentsController {
             @PathVariable(value = "publicationId") long publicationId) {
         try {
             return ResponseEntity.ok(commentsService.getCommentsByPublicationId(publicationId));
-        } catch (Exception e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(commentsService.getCommentsByPublicationId(publicationId));
         }
@@ -45,7 +47,10 @@ public class CommentsController {
         try {
             return new ResponseEntity<CommentsDTO>(commentsService.getCommentsById(publicationId, commentId),
                     HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (BlogAppException e) {
+            return new ResponseEntity<CommentsDTO>(commentsService.getCommentsById(publicationId, commentId),
+                    HttpStatus.BAD_REQUEST);
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<CommentsDTO>(commentsService.getCommentsById(publicationId, commentId),
                     HttpStatus.NOT_FOUND);
         }
@@ -75,7 +80,10 @@ public class CommentsController {
         try {
             return new ResponseEntity<CommentsDTO>(commentsService.updateComment(publicationId, commentId, commentsDTO),
                     HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (BlogAppException e) {
+            return new ResponseEntity<CommentsDTO>(commentsService.updateComment(publicationId, commentId, commentsDTO),
+                    HttpStatus.BAD_REQUEST);
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<CommentsDTO>(commentsService.updateComment(publicationId, commentId, commentsDTO),
                     HttpStatus.NOT_FOUND);
         }
@@ -90,7 +98,9 @@ public class CommentsController {
         try {
             commentsService.deleteComment(publicationId, commentId);
             return new ResponseEntity<>("Comment deleted successfully", HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (BlogAppException e) {
+            return new ResponseEntity<>("Comment not belongs to that publication", HttpStatus.BAD_REQUEST);
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>("Comment or publication not found", HttpStatus.NOT_FOUND);
         }
 
