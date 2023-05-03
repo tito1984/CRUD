@@ -82,7 +82,13 @@ public class Comments {
         super();
     }
 
-    public CommentsDTO mapEntity() {
+    public Comments(CommentsDTO commentsDTO, Publication publication){
+        super();
+        mapEntity(commentsDTO);
+        this.publication = publication;
+    }
+
+    public CommentsDTO mapDTO() {
         CommentsDTO commentsDTO = new CommentsDTO();
         commentsDTO.setId(this.id);
         commentsDTO.setName(this.name);
@@ -92,7 +98,7 @@ public class Comments {
         return commentsDTO;
     }
 
-    public Comments mapDTO(CommentsDTO commentsDTO) {
+    public Comments mapEntity(CommentsDTO commentsDTO) {
         this.setName(commentsDTO.getName());
         this.setEmail(commentsDTO.getEmail());
         this.setBody(commentsDTO.getBody());

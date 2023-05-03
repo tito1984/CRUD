@@ -156,12 +156,14 @@ public class CommentsControllerTest {
 
     @Test
     void testSaveComment() throws Exception{
-        long publicationId = 1L;
-        when(commentsService.createComment(publicationId, commentsDTO)).thenReturn(commentsDTO);
+        long publicationId = 1;
+
+        when(commentsService.createComment(anyLong(), any(CommentsDTO.class))).thenReturn(commentsDTO);
 
         ResultActions response = mockMvc.perform(post("/api/publications/{publicationId}/comments", publicationId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(commentsDTO)));
+
 
         response.andDo(print())
                 .andExpect(status().isCreated())
@@ -174,7 +176,7 @@ public class CommentsControllerTest {
     @Test
     void testSaveCommentNotFound() throws Exception{
         long publicationId = 1L;
-        when(commentsService.createComment(publicationId, commentsDTO)).thenThrow(ResourceNotFoundException.class);
+        when(commentsService.createComment(anyLong(), any(CommentsDTO.class))).thenThrow(ResourceNotFoundException.class);
 
         ResultActions response = mockMvc.perform(post("/api/publications/{publicationId}/comments", publicationId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -190,7 +192,7 @@ public class CommentsControllerTest {
         Long publicationId = 1L;
         Long commentId = 1L;
 
-        when(commentsService.updateComment(publicationId, commentId, commentsDTO)).thenReturn(commentsDTO);
+        when(commentsService.updateComment(anyLong(), anyLong(), any(CommentsDTO.class))).thenReturn(commentsDTO);
 
         ResultActions response = mockMvc.perform(put("/api/publications/{publicationId}/comments/{commentId}",publicationId,commentId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -209,7 +211,7 @@ public class CommentsControllerTest {
         Long publicationId = 1L;
         Long commentId = 1L;
 
-        when(commentsService.updateComment(publicationId, commentId, commentsDTO)).thenThrow(ResourceNotFoundException.class);
+        when(commentsService.updateComment(anyLong(), anyLong(), any(CommentsDTO.class))).thenThrow(ResourceNotFoundException.class);
 
         ResultActions response = mockMvc.perform(put("/api/publications/{publicationId}/comments/{commentId}",publicationId,commentId)
                 .contentType(MediaType.APPLICATION_JSON)

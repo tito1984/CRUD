@@ -26,11 +26,11 @@ public class PublicationServiceImpl implements PublicationService {
 
         Publication publication = new Publication();
 
-        publication.mapDTO(publicationDTO);
+        publication.mapEntity(publicationDTO);
 
         Publication newPublication = publicationRepository.save(publication);
 
-        PublicationDTO publicationAnswerDto = newPublication.mapEntity();
+        PublicationDTO publicationAnswerDto = newPublication.mapDTO();
 
         return publicationAnswerDto;
     }
@@ -44,7 +44,7 @@ public class PublicationServiceImpl implements PublicationService {
         Page<Publication> publications = publicationRepository.findAll(pageable);
 
         List<Publication> publicationList = publications.getContent();
-        List<PublicationDTO> content = publicationList.stream().map(publication -> publication.mapEntity())
+        List<PublicationDTO> content = publicationList.stream().map(publication -> publication.mapDTO())
                 .collect(Collectors.toList());
 
         PublicationResponse publicationResponse = new PublicationResponse();
@@ -63,7 +63,7 @@ public class PublicationServiceImpl implements PublicationService {
         Publication publication = publicationRepository
                 .findById(id).orElseThrow(() -> new ResourceNotFoundException("Publication", "id", id));
 
-        return publication.mapEntity();
+        return publication.mapDTO();
     }
 
     @Override
@@ -71,13 +71,11 @@ public class PublicationServiceImpl implements PublicationService {
         Publication publication = publicationRepository
                 .findById(id).orElseThrow(() -> new ResourceNotFoundException("Publication", "id", id));
 
-        publication.setTitle(publicationDTO.getTitle());
-        publication.setDescription(publicationDTO.getDescription());
-        publication.setContent(publicationDTO.getContent());
+        publication.mapEntity(publicationDTO);
 
         Publication publicationUpdated = publicationRepository.save(publication);
 
-        return publicationUpdated.mapEntity();
+        return publicationUpdated.mapDTO();
     }
 
     @Override

@@ -91,7 +91,7 @@ public class Publication {
         this.content = content;
     }
 
-    public PublicationDTO mapEntity() {
+    public PublicationDTO mapDTO() {
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setId(this.id);
         publicationDTO.setTitle(this.title);
@@ -102,7 +102,7 @@ public class Publication {
         return publicationDTO;
     }
 
-    public Publication mapDTO(PublicationDTO publicationDTO) {
+    public Publication mapEntity(PublicationDTO publicationDTO) {
         this.setTitle(publicationDTO.getTitle());
         this.setDescription(publicationDTO.getDescription());
         this.setContent(publicationDTO.getContent());

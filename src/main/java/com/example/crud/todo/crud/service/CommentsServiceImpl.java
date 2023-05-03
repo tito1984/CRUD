@@ -26,23 +26,20 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     public CommentsDTO createComment(long publicationId, CommentsDTO commentsDTO) {
-        Comments comments = new Comments();
-        comments.mapDTO(commentsDTO);
         Publication publication = publicationRepository
                 .findById(publicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Publication", "id", publicationId));
-
-        comments.setPublication(publication);
+        Comments comments = new Comments(commentsDTO, publication);
         Comments newComments = commentRepository.save(comments);
 
-        return newComments.mapEntity();
+        return newComments.mapDTO();
     }
 
     @Override
     public List<CommentsDTO> getCommentsByPublicationId(long publicationId) {
         List<Comments> comments = commentRepository.findByPublicationId(publicationId);
 
-        return comments.stream().map(comment -> comment.mapEntity()).collect(Collectors.toList());
+        return comments.stream().map(comment -> comment.mapDTO()).collect(Collectors.toList());
     }
 
     @Override
@@ -58,7 +55,7 @@ public class CommentsServiceImpl implements CommentsService {
             throw new BlogAppException(HttpStatus.BAD_REQUEST, "Comment not belongs to that publication");
         }
 
-        return comments.mapEntity();
+        return comments.mapDTO();
     }
 
     @Override
@@ -74,13 +71,10 @@ public class CommentsServiceImpl implements CommentsService {
             throw new BlogAppException(HttpStatus.BAD_REQUEST, "Comment not belongs to that publication");
         }
 
-        comments.setName(applicationComment.getName());
-        comments.setEmail(applicationComment.getEmail());
-        comments.setBody(applicationComment.getBody());
-
+        comments.mapEntity(applicationComment);
         Comments commentUpdate = commentRepository.save(comments);
 
-        return commentUpdate.mapEntity();
+        return commentUpdate.mapDTO();
     }
 
     @Override

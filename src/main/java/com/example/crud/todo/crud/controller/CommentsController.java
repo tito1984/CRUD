@@ -53,13 +53,15 @@ public class CommentsController {
     }
 
     @PostMapping("/{publicationId}/comments")
-    public ResponseEntity<CommentsDTO> saveComment(
-            @Valid @PathVariable(value = "publicationId") long publicationId, @RequestBody CommentsDTO commentsDTO) {
+    public ResponseEntity<CommentsDTO> createComment(
+            @Valid @PathVariable(value = "publicationId") long publicationId, @RequestBody CommentsDTO commentsDTO) { 
+        CommentsDTO result = new CommentsDTO();
         try {
-            return new ResponseEntity<CommentsDTO>(commentsService.createComment(publicationId, commentsDTO),
+            result = commentsService.createComment(publicationId, commentsDTO);
+            return new ResponseEntity<CommentsDTO>(result,
                     HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<CommentsDTO>(commentsService.createComment(publicationId, commentsDTO),
+            return new ResponseEntity<CommentsDTO>(result,
                     HttpStatus.NOT_FOUND);
         }
 
